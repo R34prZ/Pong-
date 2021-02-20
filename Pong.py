@@ -1,5 +1,6 @@
 # import essencial modules
 import pygame, sys
+from pygame.draw import rect
 clock = pygame.time.Clock()
 from pygame.locals import *
 
@@ -13,7 +14,8 @@ WIN_SIZE = (720, 480)
 screen = pygame.display.set_mode(WIN_SIZE)
 
 # function that blits text in the screen in a easier way
-def blit_text(text, x, y, font ='./fonts/FreePixel.ttf', font_size=24, color=(255,255,255), center=False):
+def blit_text(text, x, y, font ='./fonts/FreePixel.ttf', font_size=24, color=(255,255,255), center=False) -> None:
+    """ Automatically blit text on the screen. """
     screen_font = pygame.font.Font(font, font_size)
     text_surface = screen_font.render(text, True, color)
     if center:
@@ -23,12 +25,14 @@ def blit_text(text, x, y, font ='./fonts/FreePixel.ttf', font_size=24, color=(25
         screen.blit(text_surface, (x, y))
 
 # function that play sounds in a easier way
-def play_sound(sound):
+def play_sound(sound) -> None:
+    """ This function plays the selected sound. """
     sound_file = pygame.mixer.Sound(sound)
     pygame.mixer.Sound.play(sound_file)
 
 # main function
-def main():
+def main() -> None:
+    """ Main game function. """
     # game objects rects
     ball_rect = pygame.Rect(WIN_SIZE[0] // 2, WIN_SIZE[1] // 2, 10, 10)
     right_paddle_rect = pygame.Rect(WIN_SIZE[0] *0 + 50, WIN_SIZE[1]//2 - 25, 10, 50)
@@ -153,21 +157,56 @@ def main():
         pygame.display.update()
     
 # menu, the first thing i'll see
-def menu():
+def menu() -> None:
+    """ Main menu function. """
+
+    # button rects
+    start_button_rect = pygame.Rect(WIN_SIZE[0]/2 - 75, WIN_SIZE[1]/2 - 25, 150, 50)
+    exit_button_rect = pygame.Rect(WIN_SIZE[0]/2 - 75, WIN_SIZE[1]/2 + 50, 150, 50)
+
+    # button/mouse color interaction
+    start_button_color_default = (255, 100, 150)
+    exit_button_color_default = (255, 50, 100)
+    mouse_over_button_color = (200, 100, 50)
+    start_button_color = start_button_color_default
+    exit_button_color = exit_button_color_default
+    
     # main menu loop
     while True:
         # for loop to handle keys
+        screen.fill((0, 0, 0))
+        start_button = pygame.draw.rect(screen, start_button_color, start_button_rect)
+        exit_button = pygame.draw.rect(screen, exit_button_color, exit_button_rect)
+        mouse_pos = pygame.mouse.get_pos()
+
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
+            # emergency exit with ESC
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     pygame.quit()
                     sys.exit()
-                if event.key == K_SPACE:
-                    main()
-        blit_text('Press SPACE to play!', 0, WIN_SIZE[1]//2, center=True)
+            # mouse over button check (should probably make a funtion for those)
+            if mouse_pos[0] >= start_button.x and mouse_pos[1] >= start_button.y:
+                if mouse_pos[0] <= start_button.x + 150 and mouse_pos[1] <= start_button.y + 50:
+                    start_button_color = mouse_over_button_color
+                    if event.type == MOUSEBUTTONDOWN:
+                        main()
+            else:
+                start_button_color = start_button_color_default
+            if mouse_pos[0] >= exit_button.x and mouse_pos[1] >= exit_button.y:
+                if mouse_pos[0] <= exit_button.x + 150 and mouse_pos[1] <= exit_button.y + 50:
+                    exit_button_color = mouse_over_button_color
+                    if event.type == MOUSEBUTTONDOWN:
+                        pygame.quit()
+                        sys.exit()
+            else:
+                exit_button_color = start_button_color_default
+
+        blit_text('Start', 0, WIN_SIZE[1]//2 - 10, center=True)
+        blit_text('Quit', 0, exit_button_rect.y + 10, center=True)
         pygame.display.update()
 
 if __name__ == '__main__':
