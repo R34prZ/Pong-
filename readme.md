@@ -1,5 +1,5 @@
 # The classic Pong game implemented in python using Pygame!
-## I made it in just a few ours, sou bugs are expected.
+## I made it in just a few ours, so bugs are expected.
 
 ### To do:
 - [x] Basic structure;
