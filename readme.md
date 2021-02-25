@@ -7,8 +7,5 @@
 - [x] 2 player support;
 - [x] Basic collisions;
 - [x] Sounds;
-- [ ] Enemy AI;
-- [ ] More colors;
-- [ ] Better menu to support selections against AI or 2 players;
 
 - Made by: R34prZ :)
