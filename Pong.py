@@ -88,7 +88,7 @@ def main() -> None:
     fullscreen = False
     show_fps = False
 
-    # this part puts the '3,2,1' counter in teh beggining
+    # this part puts the '3,2,1' counter in the beggining
     for i in range(1, 5):
         screen.fill((0, 0, 0))
         blit_text(screen, 'tip: press F to fullscreen',
